@@ -5,6 +5,7 @@ from collections import namedtuple
 
 pygame.init()
 font = pygame.font.Font('arial.ttf', 20)
+lont = pygame.font.Font('arial.ttf', 50)
 
 class Way(Enum):
     RIGHT = 1
@@ -14,11 +15,13 @@ class Way(Enum):
     
 Point = namedtuple('Point', 'x, y')
 
-# rgb colors
-WHITE = (255, 255, 255)
 RED = (255,0,0)
-GREEN = (0, 255, 0)
-BLACK = (0,0,0)
+CYAN = (0,255,255)
+WHITE = (255, 255, 255)
+GREEN = (0,255,0)
+PINK = (255,0,255)
+YELLOW = (255,255,0)
+GRAY = (169,169,169)
 
 SIZE = 20
 SPEED = 10
@@ -73,6 +76,9 @@ class SnakeGame:
         gameover = False
         if self.collision():
             gameover = True
+            wext=lont.render("Fuck You",True,WHITE)
+            self.display.blit(wext,[self.w//3,self.h//2])
+            pygame.display.flip()
             return gameover, self.score
             
         if self.head == self.food:
@@ -87,22 +93,26 @@ class SnakeGame:
         return gameover, self.score
     
     def collision(self):
-        if self.head.x > self.w - SIZE or self.head.x < 0 or self.head.y > self.h - SIZE or self.head.y < 0:
-            return True
-
         if self.head in self.snake[1:]:
             return True
         
         return False
         
     def update(self):
-        self.display.fill(BLACK)
+        self.display.fill(GRAY)
         
         for pt in self.snake:
-            pygame.draw.ellipse(self.display, GREEN, pygame.Rect(pt.x, pt.y, SIZE, SIZE),3)
-            if pt==self.head:
-                pygame.draw.ellipse(self.display, WHITE, pygame.Rect(pt.x, pt.y, SIZE, SIZE),4)
-  
+            if self.snake.index(pt)%5==0:
+                pygame.draw.rect(self.display, WHITE, pygame.Rect(pt.x, pt.y, SIZE, SIZE),3)
+            elif self.snake.index(pt)%4==0:
+                pygame.draw.ellipse(self.display, YELLOW, pygame.Rect(pt.x, pt.y, SIZE, SIZE),3)
+            elif self.snake.index(pt)%3==0:
+                pygame.draw.rect(self.display, CYAN, pygame.Rect(pt.x, pt.y, SIZE, SIZE))
+            elif self.snake.index(pt)%2==0:
+                pygame.draw.ellipse(self.display, GREEN, pygame.Rect(pt.x, pt.y, SIZE, SIZE))
+            else:
+                pygame.draw.ellipse(self.display, PINK, pygame.Rect(pt.x, pt.y, SIZE, SIZE),3)
+
         pygame.draw.ellipse(self.display, RED, pygame.Rect(self.food.x, self.food.y, SIZE, SIZE))
         
         text = font.render("score: " + str(self.score), True, WHITE)
@@ -113,13 +123,13 @@ class SnakeGame:
         x = self.head.x
         y = self.head.y
         if way == Way.RIGHT:
-            x += SIZE
+            x =(x+ SIZE)%self.w
         elif way == Way.LEFT:
-            x -= SIZE
+            x = (x- SIZE)%self.w
         elif way == Way.DOWN:
-            y += SIZE
+            y =(y+ SIZE)%self.h
         elif way == Way.UP:
-            y -= SIZE
+            y =(y- SIZE)%self.h
             
         self.head = Point(x, y)          
 

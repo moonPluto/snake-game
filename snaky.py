@@ -18,10 +18,9 @@ Point = namedtuple('Point', 'x, y')
 RED = (255,0,0)
 CYAN = (0,255,255)
 WHITE = (255, 255, 255)
-GREEN = (0,255,0)
 PINK = (255,0,255)
 YELLOW = (255,255,0)
-GRAY = (169,169,169)
+BLACK = (0,0,0)
 
 SIZE = 20
 SPEED = 10
@@ -99,17 +98,15 @@ class SnakeGame:
         return False
         
     def update(self):
-        self.display.fill(GRAY)
+        self.display.fill(BLACK)
         
         for pt in self.snake:
-            if self.snake.index(pt)%5==0:
+            if self.snake.index(pt)%4==0:
                 pygame.draw.rect(self.display, WHITE, pygame.Rect(pt.x, pt.y, SIZE, SIZE),3)
-            elif self.snake.index(pt)%4==0:
-                pygame.draw.ellipse(self.display, YELLOW, pygame.Rect(pt.x, pt.y, SIZE, SIZE),3)
             elif self.snake.index(pt)%3==0:
-                pygame.draw.rect(self.display, CYAN, pygame.Rect(pt.x, pt.y, SIZE, SIZE))
+                pygame.draw.ellipse(self.display, YELLOW, pygame.Rect(pt.x, pt.y, SIZE, SIZE))
             elif self.snake.index(pt)%2==0:
-                pygame.draw.ellipse(self.display, GREEN, pygame.Rect(pt.x, pt.y, SIZE, SIZE))
+                pygame.draw.rect(self.display, CYAN, pygame.Rect(pt.x, pt.y, SIZE, SIZE))
             else:
                 pygame.draw.ellipse(self.display, PINK, pygame.Rect(pt.x, pt.y, SIZE, SIZE),3)
 
